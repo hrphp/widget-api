@@ -24,13 +24,13 @@ class WidgetsTest extends TestCase
         $this->client->get('/widgets/1');
         $body = $this->client->response->body();
         $this->assertJson($body);
-        $this->assertSame(1, json_decode($body, true)['id']);
+        $this->assertSame(1, (int) json_decode($body, true)['widgets']['id']);
     }
 
     public function testFindAll()
     {
         $this->client->get('/widgets', ['offset' => 0, 'limit' => 5]);
         $widgets = json_decode($this->client->response->body(), true);
-        $this->assertSame(5, count($widgets));
+        $this->assertSame(5, count($widgets['widgets']));
     }
 }

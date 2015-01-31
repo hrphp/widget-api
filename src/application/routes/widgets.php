@@ -7,5 +7,17 @@
  */
 
 $app->get('/widgets', function () use ($app) {
+    $result = [
+        ['id' => 1, 'name' => 'My Favorite Widget'],
+        ['id' => 2, 'name' => 'Another Widget'],
+        ['id' => 3, 'name' => 'Another Widget'],
+        ['id' => 4, 'name' => 'Another Widget'],
+        ['id' => 5, 'name' => 'Another Widget'],
+    ];
+    echo json_encode($result);
+});
 
+$app->get('/widgets/:id', function ($id) use ($app) {
+    $result = ['id' => $id, 'name' => 'My Favorite Widget'];
+    echo json_encode($result);
 });
