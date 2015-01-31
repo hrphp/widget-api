@@ -1,0 +1,31 @@
+{
+  "name": "hrphp/widgets-api",
+  "require": {
+    "php": ">=5.4.0",
+    "slim/slim": "2.*",
+    "ext-curl": "*"
+  },
+  "require-dev": {
+    "there4/slim-test-helpers": "*",
+    "phpunit/phpunit": "*",
+    "squizlabs/php_codesniffer": "1.*",
+    "phing/phing": "*"
+  },
+  "autoload": {
+    "psr-4": {
+      "Hrphp\\": "src/application/library/"
+    }
+  },
+  "autoload-dev": {
+    "psr-4": {
+      "HrphpTest\\": "tests/library/"
+    }
+  },
+  "extra": {
+    "heroku": {
+      "document-root": "src/public",
+      "index-document": "index.php",
+      "nginx-includes": [ "conf/nginx.conf" ]
+    }
+  }
+}
