@@ -23,6 +23,7 @@
   },
   "extra": {
     "heroku": {
+      "framework": "slim",
       "document-root": "src/public",
       "index-document": "index.php",
       "nginx-includes": [ "conf/nginx.conf" ]
