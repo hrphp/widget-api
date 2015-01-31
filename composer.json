@@ -20,13 +20,5 @@
     "psr-4": {
       "HrphpTest\\": "tests/library/"
     }
-  },
-  "extra": {
-    "heroku": {
-      "framework": "slim",
-      "document-root": "src/public",
-      "index-document": "index.php",
-      "nginx-includes": [ "conf/nginx.conf" ]
-    }
   }
 }
