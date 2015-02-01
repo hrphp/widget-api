@@ -3,7 +3,13 @@
 <project name="HRPHP Widgets Web API" default="build" basedir=".">
 
     <target name="build"
-            depends="prepare, phpcs, phpunit" />
+            depends="prepare, phpcs, create-test-db, seed-test-db, phpunit, drop-test-db" />
+
+    <property name="db.host" value="127.0.0.1" override="true" />
+    <property name="db.name" value="widgets-api-test" override="true" />
+    <property name="db.user" value="root" override="true" />
+    <property name="db.pass" value="" override="true" />
+    <property name="db.url" value="mysql:host=${db.host};dbname=${db.name}" override="true" />
 
     <property name="bin.dir" value="${project.basedir}/vendor/bin" override="true" />
     <property name="reports.dir" value="${project.basedir}/reports" override="true" />
@@ -12,6 +18,31 @@
         <patternset refid="php"/>
     </fileset>
 
+    <!-- Create and seed test database -->
+    <target name="create-test-db" description="Create test database">
+        <pdo url="mysql:host=${db.host}" encoding="utf8" userId="${db.user}" password="${db.pass}" onerror="abort">
+            DROP DATABASE IF EXISTS `${db.name}`;
+            CREATE DATABASE `${db.name}` /*!40100 DEFAULT CHARACTER SET utf8 */;
+        </pdo>
+    </target>
+
+    <!-- Create and seed test database -->
+    <target name="seed-test-db" description="Seed test database" depends="create-test-db">
+        <pdo url="${db.url}" encoding="utf8" userId="${db.user}" password="${db.pass}" onerror="abort">
+            USE `${db.name}`;
+            <fileset dir="${project.basedir}/conf">
+                <include name="db.sql" />
+            </fileset>
+        </pdo>
+    </target>
+
+    <!-- Drop test database -->
+    <target name="drop-test-db" description="Drop test database">
+        <pdo url="${db.url}" encoding="utf8" userId="${db.user}" password="${db.pass}" onerror="abort">
+            DROP DATABASE IF EXISTS `${db.name}`;
+        </pdo>
+    </target>
+
     <!-- Clean up from previous builds -->
     <target name="clean" description="Cleanup build artifacts">
         <delete dir="${reports.dir}/coverage" />
@@ -19,7 +50,7 @@
     </target>
 
     <!-- Prepare for the new build -->
-    <target name="prepare" depends="clean" description="Prepare for build">
+    <target name="prepare" description="Prepare for build" depends="clean">
         <mkdir dir="${reports.dir}/coverage" />
         <mkdir dir="${reports.dir}/logs" />
     </target>
@@ -32,7 +63,7 @@
     </target>
 
     <!-- PHPUnit -->
-    <target name="phpunit" description="Run unit tests with PHPUnit">
+    <target name="phpunit" description="Run unit tests with PHPUnit" depends="seed-test-db">
         <echo msg="Running tests in test suite..." />
         <exec command="${bin.dir}/phpunit --coverage-clover ${reports.dir}/coverage/clover.xml tests"
               checkreturn="true" />
