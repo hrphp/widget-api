@@ -11,6 +11,10 @@
          stopOnFailure="false"
          bootstrap="tests/bootstrap.php">
 
+    <php>
+        <env name="CLEARDB_DATABASE_URL" value="mysql://root:@127.0.0.1/widgets-api-test?reconnect=true"/>
+    </php>
+
     <testsuites>
         <testsuite name="Unit">
             <directory suffix="Test.php">tests/library/Unit</directory>
