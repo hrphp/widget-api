@@ -4,7 +4,7 @@ CREATE TABLE `widgets` (
   `name` varchar(45) DEFAULT NULL,
   `color` varchar(45) NOT NULL,
   `createdAt` datetime DEFAULT NULL,
-  `modifiedAt` datetime DEFAULT CURRENT_TIMESTAMP,
+  `modifiedAt` timestamp DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`,`color`),
   UNIQUE KEY `id_UNIQUE` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
