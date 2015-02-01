@@ -56,12 +56,17 @@ class WidgetMapper
         return $results;
     }
 
-    public static function create($id, $data)
+    public static function create($data)
     {
         $db = Db::getConnection();
-        $sql = sprintf('DELETE FROM widgets WHERE id = %d', $id);
+        $sql = sprintf(
+            'INSERT INTO widgets (name, color, createdAt) VALUES (\'%s\', \'%s\', %s)',
+            $data['name'],
+            $data['color'],
+            'NOW()'
+        );
         if ($rows = $db->exec($sql)) {
-            return true;
+            return self::findById($db->lastInsertId());
         }
         return false;
     }

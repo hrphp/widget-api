@@ -42,6 +42,21 @@ class WidgetsTest extends TestCase
         $this->assertSame(5, count($widgets['widgets']));
     }
 
+    public function testFindByKeyword()
+    {
+        $this->client->get('/widgets', ['q' => 'widget']);
+        $widgets = json_decode($this->client->response->body(), true);
+        $this->assertSame(5, count($widgets['widgets']));
+    }
+
+    public function testCreate()
+    {
+        $this->client->put('/widgets', ['name' => 'That Widget', 'color' => 'orange']);
+        $widgets = json_decode($this->client->response->body(), true);
+        $this->assertSame(201, $this->client->response->status());
+        $this->assertSame('orange', $widgets['widgets']['color']);
+    }
+
     public function testDelete()
     {
         $this->client->delete('/widgets/5');

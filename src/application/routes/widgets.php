@@ -24,14 +24,15 @@ $app->get('/widgets/:id', function ($id) use ($app) {
     echo json_encode($result);
 })->conditions(['id' => '\d+']);
 
-$app->put('/widgets', function ($id) use ($app) {
-    $data = $app->request->getBody();
-    $result = WidgetMapper::create($id, $data);
+$app->put('/widgets', function () use ($app) {
+    parse_str($app->request->getBody(), $data);
+    $result = WidgetMapper::create($data);
+    $app->response->setStatus(201);
     echo json_encode($result);
 });
 
 $app->post('/widgets/:id', function ($id) use ($app) {
-    $data = $app->request->getBody();
+    parse_str($app->request->getBody(), $data);
     if (!$result = WidgetMapper::update($id, $data)) {
         $app->error(new \Exception('Could not create the widget.', 400));
     }
