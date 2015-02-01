@@ -27,10 +27,27 @@ class WidgetsTest extends TestCase
         $this->assertSame(1, (int) json_decode($body, true)['widgets']['id']);
     }
 
+    public function testFindByOutOfRangeId()
+    {
+        $this->client->get('/widgets/999');
+        $error = json_decode($this->client->response->body(), true);
+        $this->assertSame(404, $this->client->response->status());
+        $this->assertSame('Record(s) not found matching the provided criteria.', $error['error']);
+    }
+
     public function testFindAll()
     {
         $this->client->get('/widgets', ['offset' => 0, 'limit' => 5]);
         $widgets = json_decode($this->client->response->body(), true);
         $this->assertSame(5, count($widgets['widgets']));
     }
+
+    public function testDelete()
+    {
+        $this->client->delete('/widgets/5');
+        $this->assertEmpty($this->client->response->body());
+        $this->assertSame(204, $this->client->response->status());
+    }
+
+mysql://bb682028dab8a1:e0194153@us-cdbr-iron-east-01.cleardb.net/heroku_6c7eff9bdc54f06?reconnect=true
 }

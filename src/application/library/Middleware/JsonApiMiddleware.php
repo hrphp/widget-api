@@ -14,24 +14,46 @@ class JsonApiMiddleware extends Middleware
 {
     public function call()
     {
-        $this->next->call();
-        $this->setResponse();
-    }
-
-    private function setResponse()
-    {
         $app = $this->app;
         $app->response->headers->set('Content-Type', 'application/json');
-        $body = json_decode($app->response->getBody(), true);
+        try {
+            $this->next->call();
+            $this->setResults();
+        } catch (\Exception $ex) {
+            $this->setError($ex);
+        }
+    }
+
+    private function setError(\Exception $ex)
+    {
+        $type = str_replace('Hrphp\Exception\\', '', get_class($ex));
+        $code = 500;
+        switch($type) {
+            case 'RecordsNotFoundException':
+                $code = 404;
+                break;
+        }
+        $this->app->response->setStatus($code);
+        $this->app->response->setBody(json_encode(['error' => $ex->getMessage()]));
+        ob_end_clean();
+    }
+
+    private function setResults()
+    {
+        if (!$body = $this->app->response->getBody()) {
+            return;
+        }
+
+        $widgets = json_decode($body, true);
         $output['widgets'] = [];
-        if (isset($body[0])) {
-            foreach ($body as $widget) {
+        if (isset($widgets[0])) {
+            foreach ($widgets as $widget) {
                 $output['widgets'][] = $this->standardize($widget);
             }
         } else {
-            $output['widgets'] = $this->standardize($body);
+            $output['widgets'] = $this->standardize($widgets);
         }
-        $app->response->setBody(json_encode($output));
+        $this->app->response->setBody(json_encode($output));
     }
 
     private function standardize(array $data)
