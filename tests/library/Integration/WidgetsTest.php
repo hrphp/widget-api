@@ -48,6 +48,4 @@ class WidgetsTest extends TestCase
         $this->assertEmpty($this->client->response->body());
         $this->assertSame(204, $this->client->response->status());
     }
-
-mysql://bb682028dab8a1:e0194153@us-cdbr-iron-east-01.cleardb.net/heroku_6c7eff9bdc54f06?reconnect=true
 }
