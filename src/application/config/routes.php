@@ -6,5 +6,5 @@
  * file that was distributed with this source code.
  */
 
-require 'src/application/routes/errors.php';
+require 'src/application/routes/index.php';
 require 'src/application/routes/widgets.php';
