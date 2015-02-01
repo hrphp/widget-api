@@ -6,6 +6,11 @@
  * file that was distributed with this source code.
  */
 
+// check for DB credentials
+if (!getenv('CLEARDB_DATABASE_URL')) {
+    die('Could not connect to the datasource.');
+}
+
 // set the working directory to the app root
 chdir(dirname(dirname(__DIR__)));
 
