@@ -8,6 +8,7 @@
 
 namespace Hrphp\Middleware;
 
+use Slim\Exception\Stop;
 use Slim\Middleware;
 
 class JsonApiMiddleware extends Middleware
@@ -19,22 +20,25 @@ class JsonApiMiddleware extends Middleware
         try {
             $this->next->call();
             $this->setResults();
+            if ($app->response->isNotFound()) {
+                $app->notFound();
+            }
+        } catch (\InvalidArgumentException $ex) {
+            $this->setError($ex->getMessage(), 400);
+        } catch (\DomainException $ex) {
+            $this->setError($ex->getMessage(), 404);
+        } catch (Stop $ex) {
+            $this->setError('Endpoint not supported.', 404);
         } catch (\Exception $ex) {
-            $this->setError($ex);
+            $code = $ex->getCode() > 200 ? $ex->getCode() : 500;
+            $this->setError($ex->getMessage(), $code);
         }
     }
 
-    private function setError(\Exception $ex)
+    private function setError($message, $code)
     {
-        $type = str_replace('Hrphp\Exception\\', '', get_class($ex));
-        $code = 500;
-        switch($type) {
-            case 'RecordsNotFoundException':
-                $code = 404;
-                break;
-        }
         $this->app->response->setStatus($code);
-        $this->app->response->setBody(json_encode(['error' => $ex->getMessage()]));
+        $this->app->response->setBody(json_encode(['error' => $message]));
         ob_end_clean();
     }
 
@@ -46,12 +50,14 @@ class JsonApiMiddleware extends Middleware
 
         $widgets = json_decode($body, true);
         $output['widgets'] = [];
-        if (isset($widgets[0])) {
-            foreach ($widgets as $widget) {
-                $output['widgets'][] = $this->standardize($widget);
+        if (!empty($widgets)) {
+            if (isset($widgets[0])) {
+                foreach ($widgets as $widget) {
+                    $output['widgets'][] = $this->standardize($widget);
+                }
+            } else {
+                $output['widgets'] = $this->standardize($widgets);
             }
-        } else {
-            $output['widgets'] = $this->standardize($widgets);
         }
         $this->app->response->setBody(json_encode($output));
     }

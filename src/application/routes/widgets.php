@@ -6,7 +6,7 @@
  * file that was distributed with this source code.
  */
 
-use Hrphp\Mapper\WidgetMapper;
+use Hrphp\Entity\WidgetMapper;
 
 $app->get('/widgets', function () use ($app) {
     $offset = $app->request->get('offset');
@@ -33,16 +33,11 @@ $app->put('/widgets', function () use ($app) {
 
 $app->post('/widgets/:id', function ($id) use ($app) {
     parse_str($app->request->getBody(), $data);
-    if (!$result = WidgetMapper::update($id, $data)) {
-        $app->error(new \Exception('Could not create the widget.', 400));
-    }
-    $app->response->setStatus(204);
+    $result = WidgetMapper::update($id, $data);
     echo json_encode($result);
 })->conditions(['id' => '\d+']);
 
 $app->delete('/widgets/:id', function ($id) use ($app) {
-    if (!WidgetMapper::delete($id)) {
-        $app->error(new \Exception('Could not delete the widget.', 400));
-    }
+    WidgetMapper::delete($id);
     $app->response->setStatus(204);
 })->conditions(['id' => '\d+']);
