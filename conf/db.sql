@@ -1,7 +1,7 @@
 
 CREATE TABLE `widgets` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
-  `name` varchar(45) DEFAULT NULL,
+  `name` varchar(45) NOT NULL,
   `color` varchar(45) NOT NULL,
   `createdAt` datetime DEFAULT NULL,
   `modifiedAt` timestamp DEFAULT CURRENT_TIMESTAMP,
