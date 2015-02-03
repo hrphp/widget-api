@@ -2,43 +2,82 @@
   "swagger": "2.0",
   "info": {
     "version": "1.0.0",
-    "title": "Swagger Petstore",
+    "title": "HRPHP Widgets",
     "contact": {
-      "name": "wordnik api team",
-      "url": "http://developer.wordnik.com"
+      "name": "hrphp",
+      "url": "http://hrphp.org"
     },
     "license": {
       "name": "Creative Commons 4.0 International",
       "url": "http://creativecommons.org/licenses/by/4.0/"
     }
   },
-  "host": "petstore.swagger.wordnik.com",
-  "basePath": "/api",
+  "host": "hrphp-widgets-api.herokuapp.com",
+  "basePath": "/",
   "schemes": [
     "http"
   ],
+  "produces": [
+    "application/json"
+  ],
   "paths": {
-    "/pets": {
+    "/widgets": {
       "get": {
-        "tags": [ "Pet Operations" ],
-        "summary": "finds pets in the system",
+        "description": "Finds widgets in the system.",
+        "parameters": [
+          {
+            "name": "offset",
+            "in": "query",
+            "description": "query offset",
+            "required": false,
+            "type": "integer",
+            "format": "int32"
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "description": "maximum number of results to return",
+            "required": false,
+            "type": "integer",
+            "format": "int32"
+          }
+        ],
         "responses": {
           "200": {
-            "description": "pet response",
+            "description": "Widget collection response",
             "schema": {
-              "type": "array",
-              "items": {
-                "$ref": "#/definitions/Pet"
-              }
-            },
-            "headers": {
-              "x-expires": {
-                "type": "string"
-              }
+              "$ref": "#/definitions/WidgetCollection"
             }
           },
           "default": {
-            "description": "unexpected error",
+            "description": "Unexpected error",
+            "schema": {
+              "$ref": "#/definitions/Error"
+            }
+          }
+        }
+      }
+    },
+    "/widgets/{id}": {
+      "get": {
+        "description": "Returns a widget by the provided ID",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "type": "integer",
+            "format": "int64"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Widget response",
+            "schema": {
+              "$ref": "#/definitions/Widget"
+            }
+          },
+          "default": {
+            "description": "Unexpected error",
             "schema": {
               "$ref": "#/definitions/Error"
             }
@@ -48,35 +87,51 @@
     }
   },
   "definitions": {
-    "Pet": {
+    "WidgetCollection": {
+      "required": [
+        "widgets"
+      ],
+      "properties": {
+        "widgets": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/Widget"
+          }
+        }
+      }
+    },
+    "Widget": {
       "required": [
         "id",
-        "name"
+        "name",
+        "color",
+        "createdAt",
+        "modifiedAt"
       ],
       "properties": {
         "id": {
-          "type": "integer",
-          "format": "int64"
+          "type": "string"
         },
         "name": {
           "type": "string"
         },
-        "tag": {
+        "color": {
+          "type": "string"
+        },
+        "createdAt": {
+          "type": "string"
+        },
+        "modifiedAt": {
           "type": "string"
         }
       }
     },
     "Error": {
       "required": [
-        "code",
-        "message"
+        "error"
       ],
       "properties": {
-        "code": {
-          "type": "integer",
-          "format": "int32"
-        },
-        "message": {
+        "error": {
           "type": "string"
         }
       }
