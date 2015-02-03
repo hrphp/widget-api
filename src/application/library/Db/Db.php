@@ -10,32 +10,55 @@ namespace Hrphp\Db;
 
 class Db
 {
+    /**
+     * @var \Hrphp\Db\Db
+     */
     private static $instance;
 
-    private $dbh;
+    /**
+     * @var \PDO
+     */
+    private $pdo;
 
+    /**
+     * @return \PDO
+     */
     public static function getConnection()
     {
         if (!self::$instance) {
             self::$instance = new self();
         }
-        return self::$instance->getDbh();
+        return self::$instance->getPdo();
     }
 
-    public function getDbh()
+    /**
+     * @param \PDO $pdo
+     */
+    public function setPdo(\PDO $pdo)
     {
-        return $this->dbh;
+        $this->pdo = $pdo;
     }
 
+    /**
+     * @return \PDO
+     */
+    public function getPdo()
+    {
+        return $this->pdo;
+    }
+
+    /**
+     * Parses the connection URL and registers the PDO driver.
+     */
     private function __construct()
     {
         $url = getenv('CLEARDB_DATABASE_URL');
         $conn = parse_url($url);
-        $server = $conn['host'];
-        $username = $conn['user'];
-        $password = $conn['pass'];
         $db = substr($conn['path'], 1);
-        $dsn = sprintf('mysql:host=%s;dbname=%s', $server, $db);
-        $this->dbh = new \PDO($dsn, $username, $password);
+        $dsn = sprintf('mysql:host=%s;dbname=%s', $conn['host'], $db);
+        $pdo = new \PDO($dsn, $conn['user'], $conn['pass']);
+        $pdo->setAttribute(\PDO::ATTR_DEFAULT_FETCH_MODE, \PDO::FETCH_ASSOC);
+        $pdo->setAttribute(\PDO::ATTR_ERRMODE, \PDO::ERRMODE_EXCEPTION);
+        $this->setPdo($pdo);
     }
 }
