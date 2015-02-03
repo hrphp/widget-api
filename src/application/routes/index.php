@@ -7,5 +7,5 @@
  */
 
 $app->get('/', function () use ($app) {
-    echo 'Whaaaaaat?';
+    die('OK');
 });
