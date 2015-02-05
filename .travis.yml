@@ -12,3 +12,4 @@ deploy:
   app: hrphp-widgets-api
   on:
     repo: hrphp/widgets-api
+    all_branches: true
