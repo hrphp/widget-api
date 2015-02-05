@@ -68,7 +68,7 @@ class JsonApiMiddleware extends Middleware
         $data['href'] = sprintf(
             '%s://%s/widgets/%d',
             $request->getScheme(),
-            $request->getHostWithPort(),
+            $request->getHost(),
             $data['id']
         );
         return $data;
