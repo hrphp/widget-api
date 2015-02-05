@@ -17,6 +17,7 @@ class JsonApiMiddleware extends Middleware
     {
         $app = $this->app;
         $app->response->headers->set('Content-Type', 'application/json');
+        $app->response->headers->set('Access-Control-Allow-Origin', '*');
         try {
             $this->next->call();
             $this->setResults();
