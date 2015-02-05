@@ -10,10 +10,8 @@ deploy:
   provider: heroku
   api_key:
     secure: VccBuoFubIXT3Q/KKCuzfgw6ntT2NLcUkPv3UzOSqhKVqfivPO2s+22yOWcysUfYSaYcYpemKZ+XtsnAn7jpqKc70Wok7uQs6FsKD1XjonUqxM2QrploqdS4H9zcFpF50b462HfV6SdCvoDutTpUBtPiZ63rQtVRfRfyChO+fVs=
-  app: 
-    master: hrphp-widgets-api
-    1.x.x: hrphp-widgets-api-1
-    2.x.x: hrphp-widgets-api-2
+  app: hrphp-widgets-api-2
   on:
+    branch: 2.x.x
     repo: hrphp/widgets-api
     php: 5.6
