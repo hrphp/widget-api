@@ -1,7 +1,7 @@
 {
   "swagger": "2.0",
   "info": {
-    "version": "latest",
+    "version": "1.0.0",
     "title": "HRPHP Widgets",
     "contact": {
       "name": "hrphp",
