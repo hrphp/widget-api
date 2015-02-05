@@ -1,6 +1,8 @@
 language: php
 php:
+- 5.6
 - 5.5
+- 5.4
 install:
 - composer install --no-interaction --prefer-source
 script:
@@ -9,8 +11,9 @@ deploy:
   provider: heroku
   api_key:
     secure: VccBuoFubIXT3Q/KKCuzfgw6ntT2NLcUkPv3UzOSqhKVqfivPO2s+22yOWcysUfYSaYcYpemKZ+XtsnAn7jpqKc70Wok7uQs6FsKD1XjonUqxM2QrploqdS4H9zcFpF50b462HfV6SdCvoDutTpUBtPiZ63rQtVRfRfyChO+fVs=
-  app:
+  app: 
     master: hrphp-widgets-api
     2.x.x: hrphp-widgets-api-2
   on:
     repo: hrphp/widgets-api
+    php: 5.6
