@@ -6,6 +6,7 @@
  * file that was distributed with this source code.
  */
 
+// test
 namespace Hrphp\Db;
 
 class Db
